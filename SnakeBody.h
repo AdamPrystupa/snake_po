@@ -6,26 +6,25 @@
 #define CPP_SNAKE_SNAKEBODY_H
 
 #include <SFML/Graphics.hpp>
-#include "Vector2d.h"
+#include "SnakeSegment.h"
 #include <vector>
 
 
 class SnakeBody {
-
+    enum Directions{LEFT,RIGHT};
 
 private:
     int snakePositionX, snakePositionY; //Max 20 in X (800/40) and max 15 in Y (600/40)
     int borderlineX, borderlineY;
     int snakeWidth;
-    std::vector <Vector2d> snakeBody;
+    std::vector <SnakeSegment> snakeBody;
 
 
-public:
-
-    Snake(int x, int y, int width, int height);
+public:SnakeBody(int x, int y, int width, int height);
 
     int getX();
     int getY();
+    void moveSnake(Directions dir);
 
     void addSegment(int x, int y);
 };

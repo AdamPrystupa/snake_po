@@ -6,13 +6,13 @@
 #define CPP_SNAKE_VECTOR2D_H
 
 
-class Vector2d {
+class SnakeSegment {
     int ActualX;
     int ActualY;
     int oldX;
     int oldY;
 public:
-    Vector2d(int x, int y);
+    SnakeSegment(int x, int y);
     void setPosition(int x, int y);
 
     int getActualX();

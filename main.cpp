@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
 
         window.display();
     }*/
-SnakeBody::Snake(5,10,800,400);
+SnakeBody Snake(5,10,800,400);
 
 
     return 0;

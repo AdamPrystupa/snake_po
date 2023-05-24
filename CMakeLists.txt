@@ -24,5 +24,5 @@ endif(WIN32)
 
 find_package(SFML 2 COMPONENTS graphics audio REQUIRED)
 
-add_executable(snakesfml main.cpp Game.cpp SnakeBody.cpp Vector2d.cpp Game.h SnakeBody.h Vector2d.h )
+add_executable(snakesfml main.cpp Game.cpp SnakeBody.cpp Game.h SnakeBody.h Vector2d.h SnakeSegment.h SnakeSegment.cpp SnakeSegment.cpp SnakeSegment.cpp)
 target_link_libraries(snakesfml sfml-graphics sfml-audio)

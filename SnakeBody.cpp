@@ -4,7 +4,7 @@
 
 #include "SnakeBody.h"
 
-int SnakeBody::Snake(int x, int y, int width, int height) {
+SnakeBody::SnakeBody(int x, int y, int width, int height) {
     this->snakePositionX=x;
     this->snakePositionY=y;
     this->borderlineX=snakeWidth/2-1;
@@ -12,6 +12,13 @@ int SnakeBody::Snake(int x, int y, int width, int height) {
 }
 
 void SnakeBody::addSegment(int x, int y) {
-std::vector<Vector2d> vector;
+Vector2d vector(snakePositionX,snakePositionY);
+snakeBody.insert(snakeBody.begin(),vector);
 
+snakePositionX=x;
+snakePositionY=y;
+}
+
+void SnakeBody::moveSnake(Directions dir) {
+    
 }

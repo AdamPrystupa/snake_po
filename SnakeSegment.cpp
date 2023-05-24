@@ -2,8 +2,8 @@
 // Created by Adam on 15.05.2023.
 //
 
-#include "Vector2d.h"
-Vector2d::Vector2d(int x, int y) {
+#include "SnakeSegment.h"
+SnakeSegment::SnakeSegment(int x, int y) {
     this->ActualX=x;
     this->ActualY=y;
 
@@ -11,7 +11,7 @@ Vector2d::Vector2d(int x, int y) {
     this->oldY=0;
 }
 
-void Vector2d::setPosition(int x, int y) {
+void SnakeSegment::setPosition(int x, int y) {
     oldX=ActualX;
     oldY=ActualY;
 
@@ -19,18 +19,18 @@ void Vector2d::setPosition(int x, int y) {
     ActualY=y;
 }
 
-int Vector2d::getOldX() {
+int SnakeSegment::getOldX() {
     return oldX;
 }
 
-int Vector2d::getOldY() {
+int SnakeSegment::getOldY() {
     return oldY;
 }
 
-int Vector2d::getActualX() {
+int SnakeSegment::getActualX() {
     return ActualX;
 }
 
-int Vector2d::getActualY() {
+int SnakeSegment::getActualY() {
     return ActualY;
 }
