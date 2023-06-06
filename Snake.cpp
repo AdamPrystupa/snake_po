@@ -11,6 +11,12 @@ Snake::Snake(sf::RenderWindow &window){
     this->segmentShape.setSize(sf::Vector2f (segmentSize,segmentSize));
     this->segmentShape.setPosition(startPosition);
     this->segmentShape.setFillColor(sf::Color::Green);
+    addSnakeSegment();
+    addSnakeSegment();
+    addSnakeSegment();
+    addSnakeSegment();
+    addSnakeSegment();
+    addSnakeSegment();
 
 
 }
@@ -49,15 +55,20 @@ float Snake::getSegmentSize(){
     return snake;
 }
 
-bool Snake::isCollision(const sf::Vector2f& position )
-{
-    if(snake[0]==position)
-        return true;
-    return false;
-}
+
 
 sf::Vector2f Snake::setDirection(sf::Vector2f dir) {
     this->direction=dir;
 }
 
+sf::Vector2f Snake::setHeadPositionX(float newX) {
+    this->snake[0].x=newX;
+}
 
+sf::Vector2f Snake::setHeadPositionY(float newY) {
+    this->snake[0].y=newY;
+}
+
+size_t Snake::getSnakeSize() {
+    return snake.size();
+}

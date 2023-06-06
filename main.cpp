@@ -10,9 +10,9 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(1600, 1000), "Snake Game");
+    sf::RenderWindow window(sf::VideoMode(1000, 670), "Snake Game");
     Snake snake(window);
-    Board board(12,10,window, snake);
+    Board board(24,18,window, snake);
 
 
         sf::Clock clock;
@@ -20,8 +20,8 @@ int main()
             float dt = clock.restart().asSeconds();
 
             board.handleInput(window);
-            board.update(dt);
-            board.render(window);
+            board.update(dt,window);
+            board.renderSnake(window);
 
         }
 
