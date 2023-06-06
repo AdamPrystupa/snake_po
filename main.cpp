@@ -1,26 +1,37 @@
-#include "Game.h"
-#include "SnakeBody.h"
 #include <SFML/Graphics.hpp>
 
-int main(int argc, char **argv) {
-/*
-    Game game;
+#include <iostream>
 
-    sf::RenderWindow window(sf::VideoMode(800,600),"SNAKE");
-    while(window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type==sf::Event::Closed)
-                window.close();
+#include "Snake.h"
+#include "Food.h"
+#include "Board.h"
+
+
+
+int main()
+{
+    sf::RenderWindow window(sf::VideoMode(1600, 1000), "Snake Game");
+    Snake snake(window);
+    Board board(12,10,window, snake);
+
+
+        sf::Clock clock;
+        while (window.isOpen()) {
+            float dt = clock.restart().asSeconds();
+
+            board.handleInput(window);
+            board.update(dt);
+            board.render(window);
 
         }
-        window.clear();
 
-        window.display();
-    }*/
-SnakeBody Snake(5,10,800,400);
-
-
-    return 0;
+        return 0;
     }
+
+
+
+
+
+
+
+
