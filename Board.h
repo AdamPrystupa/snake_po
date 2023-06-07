@@ -15,12 +15,16 @@ class Board {
     GameState gameState;
     Snake &snake;
     int numColumns;      // liczba kolumn planszy
-    int numRows;         // liczba wierszy planszy
+    int numRows;
+    float boardWidth;
+    float boardHeight;// liczba wierszy planszy
     float segmentSize;     // wymiar pojedynczego segmentu węża
     float xBegining;
     float yBegining;
     float xEnding;
     float yEnding;
+    bool isFruitGenerated;
+
 
     bool bordersPenetration;
     // inne pola, takie jak jedzenie, punktacja, itp.
@@ -31,9 +35,10 @@ public:
     void update(float dt, sf::RenderWindow &window);
     void handleInput(sf::RenderWindow& window);
     void renderSnake(sf::RenderWindow& window);
+    sf::Vector2f generateFruit();
     GameState getGameState();
     bool isSnakeOutOfBorders(const sf::Vector2f& snakeHeadPosition)const;
-    bool isCollision(const sf::Vector2f& snakeHeadPosition ) ;
+    bool isCollision() ;
     bool isFruitCollision(const sf::Vector2f& snakeHeadPosition ) const;
     bool isBodyCollision(const sf::Vector2f& snakeHeadPosition ) const;
 

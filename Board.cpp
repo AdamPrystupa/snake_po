@@ -6,7 +6,7 @@
 #include <iostream>
 
 Board::Board(int numColumns, int numRows, sf::RenderWindow &window, Snake &snake): snake(snake){
-    this->bordersPenetration= true;
+    this->bordersPenetration= false;
     this->numColumns=numColumns;
     this->numRows=numRows;
     this->segmentSize = snake.getSegmentSize();
@@ -15,7 +15,9 @@ Board::Board(int numColumns, int numRows, sf::RenderWindow &window, Snake &snake
     this->xEnding=numColumns * segmentSize + xBegining;
     this->yEnding=numRows * segmentSize + yBegining;
     this->gameState=MENU;
-
+    this->boardWidth=numColumns*segmentSize;
+    this->boardHeight=numRows*segmentSize;
+    this->isFruitGenerated=false;
 
 }
 
@@ -46,16 +48,19 @@ void Board::update(float dt, sf::RenderWindow &window)
 //                break;
 //        }
 //    }
+
     float moveInterval = 0.2f;
     static float elapsedTime = 0.0f;
-
     elapsedTime += dt;
     if (elapsedTime >= moveInterval)
     {
 
-        snake.moveSnake(snake.getDirection());
-        isCollision(snake.getSnake()[0]);
-
+        if(gameState==STARTED)
+            snake.moveSnake(snake.getDirection());
+        if(!isFruitGenerated)
+            generateFruit();
+        window.draw(smallFood);
+        isCollision();
         elapsedTime = 0.0f;
     }
 }
@@ -85,40 +90,48 @@ void Board::renderSnake(sf::RenderWindow& window)
     window.clear();
 
     for (const sf::Vector2f& segment : snake.getSnake()) {
-
         snake.segmentShape.setPosition(segment);
         window.draw(snake.segmentShape);
     }
 
     window.display();
 }
+sf::Vector2f Board::generateFruit()
+{
+    std::cout<<"TWORZENIE"<<std::endl;
+    std::srand(std::time(0));
+    sf::Vector2f foodPosition;
+    foodPosition.x=(std::rand()%int(boardWidth)+segmentSize);
+    foodPosition.y=(std::rand()%int(boardHeight)+segmentSize);
+    smallFood.setPosition(sf::Vector2f(foodPosition.x,foodPosition.y));
+    isFruitGenerated=true;
+}
 
 bool Board::isSnakeOutOfBorders(const sf::Vector2f& snakeHeadPosition)const
 {
-    if(snakeHeadPosition.x < xBegining || snakeHeadPosition.x >= xEnding ||
-            snakeHeadPosition.y < yBegining || snakeHeadPosition.y >= yEnding)
+    if(snakeHeadPosition.x <= xBegining || snakeHeadPosition.x >= xEnding ||
+            snakeHeadPosition.y <= yBegining || snakeHeadPosition.y >= yEnding)
     {std::cout<<"BORDER"<<std::endl;
         return true;}
 }
 
-bool Board::isCollision(const sf::Vector2f &snakeHeadPosition)  {
+bool Board::isCollision()  {
     if(gameState==STARTED)
     if(isSnakeOutOfBorders(snake.getSnake()[0]))
     {
-        if(bordersPenetration==true)
-        {
-            if (snake.getSnake()[0].x >= xEnding)
+        if(bordersPenetration== false)
+           // gameState=OVER;
+
+            if (snake.getSnake()[0].x > xEnding)
                 snake.setHeadPositionX(xBegining);
-            else if (snake.getSnake()[0].x <= xBegining)
+            else if (snake.getSnake()[0].x < xBegining)
                 snake.setHeadPositionX(xEnding); // Przejście na koniec planszy
-            if (snake.getSnake()[0].y >= yEnding)
+            if (snake.getSnake()[0].y > yEnding)
                 snake.setHeadPositionY(yBegining); // Przejście na początek planszy
-            else if (snake.getSnake()[0].y <= yBegining)
+            else if (snake.getSnake()[0].y < yBegining)
                 snake.setHeadPositionY(yEnding); // Przejście na koniec planszy
 
-        }
-        else
-        gameState=OVER;
+
     }
 
 
@@ -131,6 +144,7 @@ bool Board::isCollision(const sf::Vector2f &snakeHeadPosition)  {
     {
 
         std::cout << "COLLISION" << std::endl;
+        gameState=OVER;
     }
 
 }

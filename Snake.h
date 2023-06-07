@@ -18,8 +18,6 @@ class Snake {
     float segmentSize;
 public:
     sf::RectangleShape segmentShape;
-    sf::RectangleShape headShape;
-
     sf::Vector2f setDirection(sf::Vector2f dir);
     sf::Vector2f setHeadPositionX(float newX);
     sf::Vector2f setHeadPositionY(float newY);
