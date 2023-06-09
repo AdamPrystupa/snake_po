@@ -24,5 +24,5 @@ endif(WIN32)
 
 find_package(SFML 2 COMPONENTS graphics audio REQUIRED)
 
-add_executable(snakesfml main.cpp Snake.cpp Food.h Food.cpp View.h Board.h Board.cpp View.cpp GameManager.h)
+add_executable(snakesfml main.cpp Snake.cpp Food.h Food.cpp View.h Board.h Board.cpp View.cpp GameManager.h GameManager.cpp)
 target_link_libraries(snakesfml sfml-graphics sfml-audio)

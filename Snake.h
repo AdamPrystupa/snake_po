@@ -8,6 +8,7 @@
 #include <SFML/Graphics.hpp>
 #include <cstdlib>
 #include <ctime>
+#include <iostream>
 
 
 
@@ -15,6 +16,7 @@ class Snake {
 
     std::vector<sf::Vector2f> snake;
     sf::Vector2f direction;
+    sf::Vector2f windowSize;
     float segmentSize;
 public:
     sf::RectangleShape segmentShape;
@@ -30,6 +32,12 @@ public:
     void addSnakeSegment();
     void moveSnake(const sf::Vector2f& direction);
     size_t getSnakeSize();
+    bool isSelfCollision();
+    float getWindowXSize();
+    float getWindowYSize();
+    void setStartPosition(int columns);
+    bool belongsToSnake(float x, float y);
+
 
 
 };

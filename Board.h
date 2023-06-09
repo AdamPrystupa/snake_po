@@ -11,36 +11,29 @@
 
 
 class Board {
-    enum GameState {STARTED,MENU,SCOREBOARD,OVER,ENDED};
-    GameState gameState;
-    Snake &snake;
-    int numColumns;      // liczba kolumn planszy
+    int numColumns;
     int numRows;
-    float boardWidth;
-    float boardHeight;// liczba wierszy planszy
-    float segmentSize;     // wymiar pojedynczego segmentu węża
+    float segmentSize;
     float xBegining;
     float yBegining;
     float xEnding;
     float yEnding;
-    bool isFruitGenerated;
 
-
-    bool bordersPenetration;
     // inne pola, takie jak jedzenie, punktacja, itp.
 
 
 public:
-    Board(int numColumns, int numRows, sf::RenderWindow &window, Snake &snake);
-    void update(float dt, sf::RenderWindow &window);
-    void handleInput(sf::RenderWindow& window);
-    void renderSnake(sf::RenderWindow& window);
-    sf::Vector2f generateFruit();
-    GameState getGameState();
+    Board(int numColumns, int numRows);
     bool isSnakeOutOfBorders(const sf::Vector2f& snakeHeadPosition)const;
-    bool isCollision() ;
-    bool isFruitCollision(const sf::Vector2f& snakeHeadPosition ) const;
-    bool isBodyCollision(const sf::Vector2f& snakeHeadPosition ) const;
+    float getXBegining();
+    float getYBegining();
+    float getXEnding();
+    float getYEnding();
+    float getColumns();
+    float getRows();
+    void setSegmentSize(float segmentSize);
+
+
 
 
 
