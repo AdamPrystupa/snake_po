@@ -29,11 +29,8 @@ public:
     void setColumns(int columns);
     void setRows(int rows);
     void setDimensions(float segmentSize);
-    sf::RectangleShape getFruit();
-    float getSegmentSize();
-    float getFoodPositionY();
-    float getFoodPositionX();
     void clearGeneratedFoods();
+    sf::RectangleShape getFruit();
 
 
 

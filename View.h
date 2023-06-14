@@ -22,6 +22,7 @@ class View {
     sf::Text menu[3];
     sf::Text options[7];
     sf::Text over[5];
+    sf::Text scores[7];
     sf::Text points;
     sf::Text clockText;
     sf::RectangleShape checkbox;
@@ -35,25 +36,25 @@ public:
     sf::RectangleShape getBoardShape();
     void boardShapeInitiation();
     void initializeFonts();
-    sf::Text getTitle();
     sf::Text getMenu(int i);
     sf::Text getOptions(int i);
     sf::Text getOvers(int i);
+    sf::Text getScores(int i);
     sf::RectangleShape getCheckbox();
-    void setTextColor(int i, sf::Color color);
-    sf::Font getFont();
     void setMenu(sf::RenderWindow &window);
     void setOptions(sf::RenderWindow &window);
     void setOver(sf::RenderWindow &window);
-    void setClock();
+    void setBests(sf::RenderWindow &window);
     void setOptionsBacklights( sf::Vector2f mouse,bool easy, bool normal, bool hard, bool borders);
     void setOversBacklights(sf::Vector2f mouse);
+    void setBestsBacklights(sf::Vector2f mouse);
     void menuDisplay(sf::RenderWindow &window, sf::Vector2f mouse);
     void optionsDisplay(sf::RenderWindow &window);
     void oversDisplay(sf::RenderWindow &window);
-    void updateGameTime();
-    sf::Time getGameTime() const;
-    void drawClock(sf::RenderWindow &window);
+    void bestsDisplay(sf::RenderWindow &window);
+    void setScore();
+    void scoreDisplay(sf::RenderWindow &window);
+    void updateScore(int points);
 
 
 

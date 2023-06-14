@@ -18,21 +18,20 @@ class Snake {
     sf::Vector2f direction;
     sf::Vector2f windowSize;
     float segmentSize;
+
 public:
+    Snake(sf::RenderWindow &window);
     sf::RectangleShape segmentShape;
     sf::Vector2f setDirection(sf::Vector2f dir);
     sf::Vector2f setHeadPositionX(float newX);
     sf::Vector2f setHeadPositionY(float newY);
-    float setSegmentSize(float segmentSize);
     sf::Vector2f getDirection();
+    float setSegmentSize(float segmentSize);
     const std::vector<sf::Vector2f> getSnake();
-
-
-    Snake(sf::RenderWindow &window);
     void addSnakeSegment();
     void moveSnake(const sf::Vector2f& direction);
     bool isSelfCollision();
-    void setStartPosition(float xBegining,float yBegining,int rows, int columns);
+    void setStartPosition(float xBeginning,float yBeginning,int rows, int columns);
     bool belongsToSnake(float x, float y);
     void clearSnake();
 

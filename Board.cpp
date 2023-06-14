@@ -6,27 +6,27 @@
 #include <iostream>
 
 Board::Board(int numColumns, int numRows, sf::RenderWindow &window){
-    this->yBegining=0.05*window.getSize().y;
+    this->yBeginning=0.05*window.getSize().y;
     this->segmentSize=0.75*window.getSize().y/numRows;
-    this->xBegining=(window.getSize().x-numColumns*segmentSize)/2;
+    this->xBeginning=(window.getSize().x-numColumns*segmentSize)/2;
     this->numRows=numRows;
     this->numColumns=numColumns;
-    this->yEnding=yBegining+numRows*segmentSize;
-    this->xEnding=xBegining+numColumns*segmentSize;
+    this->yEnding=yBeginning+numRows*segmentSize;
+    this->xEnding=xBeginning+numColumns*segmentSize;
 }
 
 
 
 bool Board::isSnakeOutOfBorders(const sf::Vector2f& snakeHeadPosition)const
 {
-    if(snakeHeadPosition.x < xBegining || snakeHeadPosition.x > xEnding ||
-            snakeHeadPosition.y < yBegining || snakeHeadPosition.y > yEnding)
+    if(snakeHeadPosition.x < xBeginning || snakeHeadPosition.x > xEnding ||
+       snakeHeadPosition.y < yBeginning || snakeHeadPosition.y > yEnding)
         return true;
     return false;
 }
 
-float Board::getXBegining() {return xBegining;}
-float Board::getYBegining() {return yBegining;}
+float Board::getXBeginning() {return xBeginning;}
+float Board::getYBeginning() {return yBeginning;}
 float Board::getXEnding() {return xEnding;}
 float Board::getYEnding() {return yEnding;}
 float Board::getColumns() {return numColumns;}

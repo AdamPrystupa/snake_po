@@ -6,7 +6,6 @@
 
 
 View::View(Snake &snake, Board &board ): snake(snake), board(board) {
-    setClock();
     boardShapeInitiation();
 }
 
@@ -15,8 +14,8 @@ sf::RectangleShape View::getBoardShape(){
 }
 
 void View::boardShapeInitiation() {
-    boardShape.setSize(sf::Vector2f(board.getXEnding()-board.getXBegining()+board.getSegmentSize(),board.getYEnding()-board.getYBegining()+board.getSegmentSize()));
-    boardShape.setPosition(sf::Vector2f(board.getXBegining(),board.getYBegining()));
+    boardShape.setSize(sf::Vector2f(board.getXEnding()-board.getXBeginning()+board.getSegmentSize(),board.getYEnding()-board.getYBeginning()+board.getSegmentSize()));
+    boardShape.setPosition(sf::Vector2f(board.getXBeginning(),board.getYBeginning()));
     boardShape.setFillColor(sf::Color(152, 168, 69));
     boardShape.setOutlineColor(sf::Color(48, 40, 40));
     boardShape.setOutlineThickness(5.0f);
@@ -30,6 +29,7 @@ void View::initializeFonts()
 sf::Text View::getMenu(int i) {return menu[i];}
 sf::Text View::getOptions(int i) {return options[i];}
 sf::Text View::getOvers(int i) {return over[i];}
+sf::Text View::getScores(int i) {return scores[i];}
 sf::RectangleShape View::getCheckbox(){return checkbox;}
 
 
@@ -50,22 +50,24 @@ void View::setMenu(sf::RenderWindow &window) {
     menu[1].setPosition(window.getSize().x/2-menu[1].getGlobalBounds().width/2,400);
 
     menu[2].setFont(font);
-    menu[2].setString("Exit");
+    menu[2].setString("Best sores");
     menu[2].setCharacterSize(40);
     menu[2].setPosition(window.getSize().x/2-menu[2].getGlobalBounds().width/2,450);
+
+    menu[3].setFont(font);
+    menu[3].setString("Exit");
+    menu[3].setCharacterSize(40);
+    menu[3].setPosition(window.getSize().x/2-menu[3].getGlobalBounds().width/2,500);
 }
 
-void View::setTextColor(int i,sf::Color color){
-   menu[i].setFillColor(color);
-}
 
 void View::menuDisplay(sf::RenderWindow &window, sf::Vector2f mouse)
 {
     window.clear();
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 4; i++)
         window.draw(menu[i]);
 
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 4; i++)
     {
         if (menu[i].getGlobalBounds().contains(mouse))
             menu[i].setFillColor(sf::Color(179, 164, 164));
@@ -81,11 +83,11 @@ void View::menuDisplay(sf::RenderWindow &window, sf::Vector2f mouse)
 
 
 void View::setOptions(sf::RenderWindow &window)
-    {
+{
     options[0].setString("OPTIONS");
     options[1].setString("Game mode:");
     options[2].setString("Border collision");
-    options[3].setString("Back");
+    options[3].setString("Back to manu");
     options[4].setString("Easy");
     options[5].setString("Normal");
     options[6].setString("HARD!");
@@ -143,17 +145,18 @@ void View::setOptionsBacklights(sf::Vector2f mouse, bool easy, bool normal, bool
     else
         options[6].setFillColor(sf::Color::White);
 
-    if(options[3].getGlobalBounds().contains(mouse) && !borders)
+    if(options[3].getGlobalBounds().contains(mouse))
         options[3].setFillColor(sf::Color(179, 164, 164));
     else
         options[3].setFillColor(sf::Color::White);
 
+
     if(easy)
-        options[4].setFillColor(sf::Color::Yellow);
+        options[4].setFillColor(sf::Color(115, 114, 114));
     if(normal)
-        options[5].setFillColor(sf::Color::Yellow);
+        options[5].setFillColor(sf::Color(115, 114, 114));
     if(hard)
-        options[6].setFillColor(sf::Color::Yellow);
+        options[6].setFillColor(sf::Color(115, 114, 114));
 
 
     if(!borders)
@@ -167,10 +170,9 @@ void View::setOptionsBacklights(sf::Vector2f mouse, bool easy, bool normal, bool
 void View::optionsDisplay(sf::RenderWindow &window) {
     window.clear();
 
-    for(int i = 0; i < 7; i++)
+    for(int i = 1; i < 7; i++)
         window.draw(options[i]);
 
-    window.draw(checkbox);
     window.draw(checkbox);
 
     window.display();
@@ -189,78 +191,109 @@ void View::setOver(sf::RenderWindow &window) {
     over[0].setOutlineColor(sf::Color::Black);
     over[0].setOutlineThickness(2);
 
-    over[1].setCharacterSize(40);
     over[1].setString("Score :");
-    over[1].setPosition(window.getSize().x/2-over[1].getGlobalBounds().width,240);
+    over[1].setCharacterSize(60);
+    over[1].setPosition(window.getSize().x/2-0.5*over[1].getGlobalBounds().width,310);
     over[1].setOutlineColor(sf::Color::Black);
     over[1].setOutlineThickness(2);
 
+
+    over[2].setString("Try again");
     over[2].setCharacterSize(40);
-    over[2].setString("Time :");
-    over[2].setPosition(window.getSize().x/2-over[1].getGlobalBounds().width,280);
+    over[2].setPosition(window.getSize().x/2-over[1].getGlobalBounds().width,410);
     over[2].setOutlineColor(sf::Color::Black);
     over[2].setOutlineThickness(2);
 
-    over[3].setString("Try again");
+    over[3].setString("Back to menu");
     over[3].setCharacterSize(40);
-    over[3].setPosition(window.getSize().x/2-over[1].getGlobalBounds().width,360);
+    over[3].setPosition(window.getSize().x/2-over[1].getGlobalBounds().width,460);
     over[3].setOutlineColor(sf::Color::Black);
     over[3].setOutlineThickness(2);
-
-    over[4].setString("Back to menu");
-    over[4].setCharacterSize(40);
-    over[4].setPosition(window.getSize().x/2-over[1].getGlobalBounds().width,410);
-    over[4].setOutlineColor(sf::Color::Black);
-    over[4].setOutlineThickness(2);
 
 }
 
 void View::oversDisplay(sf::RenderWindow &window) {
+    over[1].setString(points.getString());
 
-    for(int i = 0; i < 5; i++) {
+
+    for(int i = 0; i < 4; i++) {
         window.draw(over[i]);
     }
-   window.display();
+    window.display();
 
 }
 
 void View::setOversBacklights(sf::Vector2f mouse) {
-    if (over[3].getGlobalBounds().contains(mouse)) {
-        over[3].setFillColor(sf::Color(179, 164, 164));
+    if (over[2].getGlobalBounds().contains(mouse)) {
+        over[2].setFillColor(sf::Color(179, 164, 164));
     }
     else
-        over[3].setFillColor(sf::Color::White);
+        over[2].setFillColor(sf::Color::White);
 
-    if (over[4].getGlobalBounds().contains(mouse))
-        over[4].setFillColor(sf::Color(179, 164, 164));
+    if (over[3].getGlobalBounds().contains(mouse))
+        over[3].setFillColor(sf::Color(179, 164, 164));
     else
-        over[4].setFillColor(sf::Color::White);
+        over[3].setFillColor(sf::Color::White);
 }
 
-void View::updateGameTime() {
-    gameTime = clock.getElapsedTime();
-};
+void View::setScore(){
+    points.setFont(font);
+    points.setString("SCORE: ");
+    points.setFillColor(sf::Color::White);
+    points.setPosition(20,20);
+    points.setCharacterSize(35);
 
-sf::Time View::getGameTime() const
-{
-    return gameTime;
+
+}
+void View::scoreDisplay(sf::RenderWindow &window){
+    window.draw(points);
 }
 
-void View::drawClock(sf::RenderWindow& window)
+void View::updateScore(int pkt)
 {
-//    sf::Time gameTime = clock.getElapsedTime();
-//    std::string timeString = std::to_string(gameTime.asSeconds());
-
-    window.draw(clockText);
+    std::string updatedScore="Score: "+std::to_string(pkt);
+    this->points.setString(updatedScore);
 }
 
-void View::setClock()
-{
-   std::cout<<"HERE"<<std::endl;
-    clockText.setFont(font);
-    clockText.setCharacterSize(30);
-    clockText.setString("Time: "/* + timeString*/);
-    clockText.setPosition(10, 10);
-    clockText.setFillColor(sf::Color::White);
-    clockText.setOutlineThickness(2);
+void View::setBests(sf::RenderWindow &window) {
+    scores[0].setString("BEST SCORES");
+    scores[1].setString("#1 ");
+    scores[2].setString("#2 ");
+    scores[3].setString("#3 ");
+    scores[4].setString("#4 ");
+    scores[5].setString("#5 ");
+    scores[6].setString("Back to menu");
+
+    scores[0].setFont(font);
+    scores[0].setCharacterSize(80);
+    scores[0].setPosition(window.getSize().x/2-scores[0].getGlobalBounds().width/2, 50);
+
+    for(int i = 1; i < 7; i++)
+    {
+        scores[i].setFont(font);
+        scores[i].setCharacterSize(40);
+        scores[i].setPosition(window.getSize().x/2-scores[i].getGlobalBounds().width/2, 100+100*i);
+    }
+    scores[6].setPosition(window.getSize().x/2-scores[6].getGlobalBounds().width/2, 700);
+
+}
+
+
+void View::bestsDisplay(sf::RenderWindow &window) {
+    window.clear();
+
+    for(int i = 0; i < 7; i++)
+        window.draw(scores[i]);
+    window.display();
+
+
+}
+
+void View::setBestsBacklights(sf::Vector2f mouse) {
+
+    if(scores[6].getGlobalBounds().contains(mouse))
+        scores[6].setFillColor(sf::Color(179, 164, 164));
+    else
+        scores[6].setFillColor(sf::Color::White);
+
 }

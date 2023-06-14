@@ -40,42 +40,15 @@ void GameManager::update(sf::RenderWindow &window) {
             view.initializeFonts();
             view.setOptions(window);
             view.setOver(window);
+            view.setBests(window);
+            view.setScore();
             areStringsInitialized=true;
         }
-        switch (gameState) {
-            case GameManager::MENU:
-                view.drawClock(window);
-                caseMenu(window);
-                break;
-            case GameManager::OPTIONS: {
-                caseOptions(window);
-                break;
-            }
-//
-//            case Board::SCOREBOARD:
-//                renderScoreboard();
-//                break;
-//
-            case GameManager::STARTED: {
-                view.drawClock(window);
-                snakeDisplay(window);
-                caseStarted(window);
-                break;
-            }
-//
-            case GameManager::OVER: {
-                caseOver(window);
-                break;
-            }
-//
-            case GameManager::ENDED:
-                window.close();
-                break;
+        statesSwitch(window);
         }
-//    }
 
         }
-    }
+
 
 
 void GameManager::handleInput(sf::RenderWindow& window)
@@ -117,7 +90,6 @@ if(keyPressed==false) {
 
 void GameManager::snakeDisplay(sf::RenderWindow& window)
 {
-
     window.clear();
     sf::RectangleShape boardShape = view.getBoardShape();
     window.draw(view.getBoardShape());
@@ -127,8 +99,6 @@ void GameManager::snakeDisplay(sf::RenderWindow& window)
     for (size_t i = 0; i < snake.getSnake().size(); i++) {
         sf::Vector2f segment = snake.getSnake()[i];
         snake.segmentShape.setPosition(segment);
-
-
         if (isFirstSegment) {
             snake.segmentShape.setFillColor(sf::Color(4, 74, 21));
             snake.segmentShape.setOutlineColor(sf::Color::Black);
@@ -141,7 +111,7 @@ void GameManager::snakeDisplay(sf::RenderWindow& window)
 
         window.draw(snake.segmentShape);
     }
-
+    view.scoreDisplay(window);
     window.draw(fruit.getFruit());
     window.display();
 }
@@ -161,7 +131,7 @@ bool GameManager::isCollision() {
         }
 
         if (snake.isSelfCollision()) {
-            whenSelfCollison();
+            whenSelfCollision();
             return true;
         }
         return false;
@@ -170,14 +140,10 @@ bool GameManager::isCollision() {
 
 void GameManager::whenOutOfBorders() {
     if (bordersPenetration == true) {
-        if (snake.getSnake()[0].y > board.getYEnding())
-            snake.setHeadPositionY(board.getYBegining());
-        if (snake.getSnake()[0].y < board.getYBegining())
-            snake.setHeadPositionY(board.getYEnding());
-        if (snake.getSnake()[0].x > board.getXEnding())
-            snake.setHeadPositionX(board.getXBegining());
-        if (snake.getSnake()[0].x < board.getXBegining())
-            snake.setHeadPositionX(board.getXEnding());
+        if (snake.getSnake()[0].y > board.getYEnding())snake.setHeadPositionY(board.getYBeginning());
+        if (snake.getSnake()[0].y < board.getYBeginning())snake.setHeadPositionY(board.getYEnding());
+        if (snake.getSnake()[0].x > board.getXEnding())snake.setHeadPositionX(board.getXBeginning());
+        if (snake.getSnake()[0].x < board.getXBeginning())snake.setHeadPositionX(board.getXEnding());
     }
     else
     {
@@ -185,20 +151,20 @@ void GameManager::whenOutOfBorders() {
         gameState=OVER;
 }
 }
-
 void GameManager::whenFruitCollision() {
     isFruitGenerated= false;
     if(generatedFruitCount==0) {
-        snake.addSnakeSegment();
-        snake.addSnakeSegment();
-        snake.addSnakeSegment();
-        snake.addSnakeSegment();
+        snake.addSnakeSegment(); snake.addSnakeSegment(); snake.addSnakeSegment(); snake.addSnakeSegment();
+        score+=4;
+        view.updateScore(score);
     }
-    else
-        snake.addSnakeSegment();
+    else { snake.addSnakeSegment();
+    score++;
+        view.updateScore(score);}
+
 }
 
-void GameManager::whenSelfCollison() {
+void GameManager::whenSelfCollision() {
     snake.setDirection(sf::Vector2f(0.0f,0.0f));
     gameState = OVER;
 
@@ -206,16 +172,7 @@ void GameManager::whenSelfCollison() {
 
 void GameManager::caseStarted(sf::RenderWindow &window)
 {
-    if (!areDimensionsSeted)
-    {
-        setDimensions();
-        areDimensionsSeted= true;
-    }
-
-    if (!isStartPosition) {
-        snake.setStartPosition(board.getXBegining(),board.getYBegining(),board.getRows(),board.getColumns());
-        isStartPosition = true;
-    }
+                setParameters();
                 static float elapsedTime = 0.0f;
                 elapsedTime += dt;
                 if (elapsedTime >= moveInterval) {
@@ -225,8 +182,7 @@ void GameManager::caseStarted(sf::RenderWindow &window)
                         handleInput(window);
                         snake.moveSnake(snake.getDirection());
                         if (!isFruitGenerated) {
-
-                            generatedFruitCount = fruit.generateFood(board.getXBegining(), board.getYBegining(), snake);
+                            generatedFruitCount = fruit.generateFood(board.getXBeginning(), board.getYBeginning(), snake);
                             isFruitGenerated = true;
                         }
                         isCollision();
@@ -246,8 +202,6 @@ void GameManager::caseMenu(sf::RenderWindow& window)
     update(window);
 }
 
-
-
 void GameManager::menuActions(sf::RenderWindow &window, sf::Event &event) {
 
     sf::Vector2f mouse(sf::Mouse::getPosition(window));
@@ -265,6 +219,9 @@ void GameManager::menuActions(sf::RenderWindow &window, sf::Event &event) {
                 gameState = OPTIONS;
 
             if(view.getMenu(2).getGlobalBounds().contains(mouse) && event.mouseButton.button == sf::Mouse::Left)
+                gameState = SCORES;
+
+            if(view.getMenu(3).getGlobalBounds().contains(mouse) && event.mouseButton.button == sf::Mouse::Left)
                 gameState = ENDED;
 
         }
@@ -286,9 +243,7 @@ void GameManager::caseOptions(sf::RenderWindow& window) {
 
 void GameManager::optionsActions(sf::RenderWindow &window, sf::Event &event) {
     {
-
         sf::Vector2f mouse(sf::Mouse::getPosition(window));
-
         window.pollEvent(event);
         {
             if (event.type == sf::Event::MouseButtonReleased)
@@ -297,32 +252,7 @@ void GameManager::optionsActions(sf::RenderWindow &window, sf::Event &event) {
 
             if (event.type == sf::Event::Closed)
                 gameState = ENDED;
-
-            if (event.type == sf::Event::MouseButtonReleased)
-                if (view.getOptions(4).getGlobalBounds().contains(mouse) &&
-                    event.mouseButton.button == sf::Mouse::Left) {
-                    moveInterval = 0.20f;
-                    easy = true;
-                    hard = false;
-                    normal = false;
-                }
-
-            if (event.type == sf::Event::MouseButtonReleased)
-                if (view.getOptions(5).getGlobalBounds().contains(mouse) &&
-                    event.mouseButton.button == sf::Mouse::Left) {
-                    moveInterval = 0.1f;
-                    easy = false;
-                    hard = false;
-                    normal = true;
-                }
-            if (event.type == sf::Event::MouseButtonReleased)
-                if (view.getOptions(6).getGlobalBounds().contains(mouse) &&
-                    event.mouseButton.button == sf::Mouse::Left) {
-                    moveInterval = 0.04f;
-                    easy = false;
-                    hard = true;
-                    normal = false;
-                }
+            gameLevel(event, mouse);
 
             if (event.type == sf::Event::MouseButtonPressed)
                 if (view.getCheckbox().getGlobalBounds().contains(mouse)) {
@@ -331,11 +261,9 @@ void GameManager::optionsActions(sf::RenderWindow &window, sf::Event &event) {
                     else
                         bordersPenetration = false;
                 }
-
             view.setOptionsBacklights(mouse, easy, normal, hard, bordersPenetration);
         }
 view.optionsDisplay(window);
-
     }
 }
 
@@ -366,15 +294,107 @@ void GameManager::overActions(sf::RenderWindow &window, sf::Event &event) {
 
 
             if (event.type == sf::Event::MouseButtonReleased)
-                if (event.mouseButton.button == sf::Mouse::Left && view.getOvers(3).getGlobalBounds().contains(mouse))
+                if (event.mouseButton.button == sf::Mouse::Left && view.getOvers(2).getGlobalBounds().contains(mouse))
                     gameState = STARTED;
 
             if (event.type == sf::Event::MouseButtonReleased)
-                if (event.mouseButton.button == sf::Mouse::Left && view.getOvers(4).getGlobalBounds().contains(mouse))
+                if (event.mouseButton.button == sf::Mouse::Left && view.getOvers(3).getGlobalBounds().contains(mouse))
                     gameState = MENU;
-
-
         }
         view.oversDisplay(window);
+    }
+}
+
+void GameManager::caseBests(sf::RenderWindow &window) {
+    sf::Event event;
+    while (gameState == GameManager::SCORES) {
+        bestsActions(window, event );
+    }
+    update(window);
+}
+
+void GameManager::bestsActions(sf::RenderWindow &window, sf::Event &event) {
+    sf::Vector2f mouse(sf::Mouse::getPosition(window));
+
+    window.pollEvent(event);
+    {
+        if (event.type == sf::Event::MouseButtonReleased)
+            if (view.getScores(6).getGlobalBounds().contains(mouse) && event.mouseButton.button == sf::Mouse::Left)
+                gameState = MENU;
+
+        if (event.type == sf::Event::Closed)
+            gameState = ENDED;
+
+
+        view.setBestsBacklights(mouse);
+    }
+    view.bestsDisplay(window);
+
+}
+
+void GameManager::statesSwitch(sf::RenderWindow &window) {
+    switch (gameState) {
+        case GameManager::MENU:
+            caseMenu(window);
+            break;
+        case GameManager::OPTIONS: {
+            caseOptions(window);
+            break;
+        }
+
+        case GameManager::SCORES:
+            caseBests(window);
+            break;
+
+        case GameManager::STARTED: {
+            snakeDisplay(window);
+            caseStarted(window);
+            break;
+        }
+
+        case GameManager::OVER: {
+            caseOver(window);
+            break;
+        }
+        case GameManager::ENDED:
+            window.close();
+            break;
+    }
+}
+
+void GameManager::gameLevel(sf::Event &event, sf::Vector2f mouse) {
+    if (event.type == sf::Event::MouseButtonReleased)
+        if (view.getOptions(4).getGlobalBounds().contains(mouse) &&
+            event.mouseButton.button == sf::Mouse::Left) {
+            moveInterval = 0.20f;
+            easy = true; hard = false; normal = false;
+        }
+
+    if (event.type == sf::Event::MouseButtonReleased)
+        if (view.getOptions(5).getGlobalBounds().contains(mouse) &&
+            event.mouseButton.button == sf::Mouse::Left) {
+            moveInterval = 0.1f;
+            easy = false; hard = false; normal = true;
+        }
+    if (event.type == sf::Event::MouseButtonReleased)
+        if (view.getOptions(6).getGlobalBounds().contains(mouse) &&
+            event.mouseButton.button == sf::Mouse::Left) {
+            moveInterval = 0.04f;
+            easy = false; hard = true; normal = false;
+        }
+}
+
+void GameManager::setParameters() {
+    if (!areDimensionsSeted)
+    {
+        setDimensions();
+        areDimensionsSeted= true;
+    }
+
+    if (!isStartPosition) {
+        snake.setStartPosition(board.getXBeginning(),board.getYBeginning(),board.getRows(),board.getColumns());
+        score=0;
+        view.updateScore(0);
+        isStartPosition = true;
     }
 }

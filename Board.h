@@ -14,19 +14,18 @@ class Board {
     int numColumns;
     int numRows;
     float segmentSize;
-    float xBegining;
-    float yBegining;
+    float xBeginning;
+    float yBeginning;
     float xEnding;
     float yEnding;
 
-    // inne pola, takie jak jedzenie, punktacja, itp.
 
 
 public:
     Board(int numColumns, int numRows, sf::RenderWindow &window);
     bool isSnakeOutOfBorders(const sf::Vector2f& snakeHeadPosition)const;
-    float getXBegining();
-    float getYBegining();
+    float getXBeginning();
+    float getYBeginning();
     float getXEnding();
     float getYEnding();
     float getColumns();

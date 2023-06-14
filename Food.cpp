@@ -1,3 +1,4 @@
+
 //
 // Created by Adam on 31.05.2023.
 //
@@ -15,10 +16,10 @@ int Food::generateFood(float xBeginning,float yBeginning,Snake snake) {
         foodPosition.x =  (std::rand()%columns)*segmentSize+xBeginning;
         foodPosition.y =(std::rand()%rows)*segmentSize+yBeginning;
         generatedFoods++;
-                fruit.setPosition(foodPosition.x, foodPosition.y);
-                fruit.setSize(sf::Vector2f(segmentSize, segmentSize));
-                fruit.setOutlineThickness(2);
-                fruit.setOutlineColor(sf::Color::Black);
+        fruit.setPosition(foodPosition.x, foodPosition.y);
+        fruit.setSize(sf::Vector2f(segmentSize, segmentSize));
+        fruit.setOutlineThickness(2);
+        fruit.setOutlineColor(sf::Color::Black);
         if (generatedFoods <= 3) {
             {
                 fruit.setFillColor(sf::Color(252, 36, 3));
