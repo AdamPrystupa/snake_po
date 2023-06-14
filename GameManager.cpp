@@ -268,6 +268,8 @@ view.optionsDisplay(window);
 
 void GameManager::caseOver(sf::RenderWindow &window) {
         sf::Event event;
+        std::cout<<score<<std::endl;
+    bestsSeted= false;
     updateBestScores(score);
     while (gameState == GameManager::OVER) {
     overActions(window, event );
@@ -323,11 +325,11 @@ void GameManager::bestsActions(sf::RenderWindow &window, sf::Event &event) {
         if (event.type == sf::Event::MouseButtonReleased)
             if (view.getScores(6).getGlobalBounds().contains(mouse) && event.mouseButton.button == sf::Mouse::Left) {
                 gameState = MENU;
-            bestsSeted= false;}
+            }
 
         if (event.type == sf::Event::Closed)
         {gameState = ENDED;
-        bestsSeted= false;}
+        }
 
 
         view.setBestsBacklights(mouse);
