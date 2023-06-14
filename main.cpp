@@ -6,31 +6,30 @@
 #include "Food.h"
 #include "Board.h"
 #include "GameManager.h"
+#include "View.h"
 
 
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(1120, 880), "Snake Game");
+    sf::RenderWindow window(sf::VideoMode(1600, 900), "Snake Game");
+    Board board(20,12,window);
     Snake snake(window);
-    Board board(24,18);
     Food fruit;
-    GameManager game(snake,board,fruit);
+    View view(snake,board);
+   GameManager game(snake,board,fruit,view);
 
 
         sf::Clock clock;
         while (window.isOpen()) {
-            float dt = clock.restart().asSeconds();
+            game.setDt(clock.restart().asSeconds());
+            game.update(window);
 
-
-            game.update(dt,window);
-            game.renderSnake(window);
 
         }
 
         return 0;
     }
-
 
 
 

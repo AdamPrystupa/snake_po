@@ -23,7 +23,7 @@ class Board {
 
 
 public:
-    Board(int numColumns, int numRows);
+    Board(int numColumns, int numRows, sf::RenderWindow &window);
     bool isSnakeOutOfBorders(const sf::Vector2f& snakeHeadPosition)const;
     float getXBegining();
     float getYBegining();
@@ -31,7 +31,7 @@ public:
     float getYEnding();
     float getColumns();
     float getRows();
-    void setSegmentSize(float segmentSize);
+    float getSegmentSize();
 
 
 

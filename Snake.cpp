@@ -23,6 +23,8 @@ do {
 
     snake.push_back(newSegmentPosition);
 }
+
+
 void Snake::moveSnake(const sf::Vector2f& direction)
 {
     sf::Vector2f newPosition = snake[0] + direction * segmentSize;
@@ -40,8 +42,8 @@ sf::Vector2f Snake::getDirection(){
     return direction;
 }
 
-float Snake::getSegmentSize(){
-    return segmentSize;
+float Snake::setSegmentSize(float segmentSize){
+    this->segmentSize=segmentSize;
 }
 
  const std::vector<sf::Vector2f> Snake::getSnake() {
@@ -62,12 +64,7 @@ sf::Vector2f Snake::setHeadPositionY(float newY) {
     this->snake[0].y=newY;
 }
 
-size_t Snake::getSnakeSize() {
-    return snake.size();
-}
 
-float Snake::getWindowXSize() { return windowSize.x;}
-float Snake::getWindowYSize() {return windowSize.y;}
 
 bool Snake::isSelfCollision() {
     for (size_t segment = 1; segment < snake.size(); ++segment) {
@@ -78,17 +75,21 @@ bool Snake::isSelfCollision() {
 }
 
 
-void Snake::setStartPosition(int columns) {
-    this->segmentSize=windowSize.x/(columns+4);
-    sf::Vector2f startPosition((columns+4)*segmentSize/2, (columns+4)*segmentSize/2);
+void Snake::setStartPosition(float xBegining,float yBegining,int rows, int columns) {
+    sf::Vector2f startPosition(xBegining+(columns/2*segmentSize), yBegining+(rows/2*segmentSize));
     snake.push_back(startPosition);
     this->segmentShape.setPosition(startPosition);
     this->segmentShape.setSize(sf::Vector2f (segmentSize,segmentSize));
 }
 
+
 bool Snake::belongsToSnake(float x, float y) {
     for (const sf::Vector2f& segment : snake) {
-        if(segment.x==x &&segment.y==y) { std::cout<<"NALEZY"<<std::endl; return true; }
-        return false;
+        if (segment.x == x && segment.y == y)
+            return true;
     }
+    return false;
 }
+
+
+void Snake::clearSnake() {snake.clear();}

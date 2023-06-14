@@ -23,7 +23,7 @@ public:
     sf::Vector2f setDirection(sf::Vector2f dir);
     sf::Vector2f setHeadPositionX(float newX);
     sf::Vector2f setHeadPositionY(float newY);
-    float getSegmentSize();
+    float setSegmentSize(float segmentSize);
     sf::Vector2f getDirection();
     const std::vector<sf::Vector2f> getSnake();
 
@@ -31,16 +31,16 @@ public:
     Snake(sf::RenderWindow &window);
     void addSnakeSegment();
     void moveSnake(const sf::Vector2f& direction);
-    size_t getSnakeSize();
     bool isSelfCollision();
-    float getWindowXSize();
-    float getWindowYSize();
-    void setStartPosition(int columns);
+    void setStartPosition(float xBegining,float yBegining,int rows, int columns);
     bool belongsToSnake(float x, float y);
+    void clearSnake();
 
 
 
 };
+
+
 
 
 #endif //SNAKE_MW_SR11_275496_SNAKE_H
