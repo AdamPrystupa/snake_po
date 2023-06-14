@@ -40,7 +40,6 @@ void GameManager::update(sf::RenderWindow &window) {
             view.initializeFonts();
             view.setOptions(window);
             view.setOver(window);
-            view.setBests(window);
             view.setScore();
             areStringsInitialized=true;
         }
@@ -269,6 +268,7 @@ view.optionsDisplay(window);
 
 void GameManager::caseOver(sf::RenderWindow &window) {
         sf::Event event;
+    updateBestScores(score);
     while (gameState == GameManager::OVER) {
     overActions(window, event );
     }
@@ -306,6 +306,8 @@ void GameManager::overActions(sf::RenderWindow &window, sf::Event &event) {
 }
 
 void GameManager::caseBests(sf::RenderWindow &window) {
+   if(!bestsSeted) { view.setBests(window, bests);
+   bestsSeted= true;}
     sf::Event event;
     while (gameState == GameManager::SCORES) {
         bestsActions(window, event );
@@ -319,11 +321,13 @@ void GameManager::bestsActions(sf::RenderWindow &window, sf::Event &event) {
     window.pollEvent(event);
     {
         if (event.type == sf::Event::MouseButtonReleased)
-            if (view.getScores(6).getGlobalBounds().contains(mouse) && event.mouseButton.button == sf::Mouse::Left)
+            if (view.getScores(6).getGlobalBounds().contains(mouse) && event.mouseButton.button == sf::Mouse::Left) {
                 gameState = MENU;
+            bestsSeted= false;}
 
         if (event.type == sf::Event::Closed)
-            gameState = ENDED;
+        {gameState = ENDED;
+        bestsSeted= false;}
 
 
         view.setBestsBacklights(mouse);
@@ -396,5 +400,37 @@ void GameManager::setParameters() {
         score=0;
         view.updateScore(0);
         isStartPosition = true;
+    }
+}
+
+void GameManager::updateBestScores(int score) {
+    int best;
+
+    std::fstream file;
+    file.open("..\\best_scores.txt", std::ios::in);
+    if (file.is_open()) {
+        std::string line;
+        while (std::getline(file, line)) {
+            best = std::stoi(line);
+            bests.push_back(best);
+        }
+        file.close();
+    }
+
+    bests.push_back(score);
+    std::sort(bests.rbegin(), bests.rend());
+
+    if (bests.size() > 5) {
+        bests.resize(5);
+    }
+
+    std::ofstream outputFile("..\\best_scores.txt");
+    if (outputFile.is_open()) {
+        for (const int& result : bests) {
+            outputFile << result << std::endl;
+        }
+        outputFile.close();
+    } else {
+        std::cerr << "Cannot open file for writing!" << std::endl;
     }
 }

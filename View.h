@@ -44,7 +44,7 @@ public:
     void setMenu(sf::RenderWindow &window);
     void setOptions(sf::RenderWindow &window);
     void setOver(sf::RenderWindow &window);
-    void setBests(sf::RenderWindow &window);
+    void setBests(sf::RenderWindow &window, std::vector<int> bests);
     void setOptionsBacklights( sf::Vector2f mouse,bool easy, bool normal, bool hard, bool borders);
     void setOversBacklights(sf::Vector2f mouse);
     void setBestsBacklights(sf::Vector2f mouse);

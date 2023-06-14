@@ -13,6 +13,7 @@
 
 #include <chrono>
 #include <thread>
+#include <fstream>
 
 
 class GameManager {
@@ -29,12 +30,14 @@ class GameManager {
     bool isFruitGenerated;
     bool areDimensionsSeted;
     bool isStartPosition;
+    bool bestsSeted;
     int generatedFruitCount;
     float moveInterval;
     float dt;
     bool keyPressed;
     bool areStringsInitialized;
     int score;
+    std::vector<int> bests;
 
     sf::Text gameName;
     sf::Font font;
@@ -63,6 +66,7 @@ public:
     void statesSwitch(sf::RenderWindow &window);
     void gameLevel(sf::Event &event, sf::Vector2f mouse);
     void setParameters();
+    void updateBestScores(int score);
 
 };
 

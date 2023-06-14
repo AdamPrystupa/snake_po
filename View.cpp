@@ -255,13 +255,13 @@ void View::updateScore(int pkt)
     this->points.setString(updatedScore);
 }
 
-void View::setBests(sf::RenderWindow &window) {
+void View::setBests(sf::RenderWindow &window, std::vector<int> bests) {
     scores[0].setString("BEST SCORES");
-    scores[1].setString("#1 ");
-    scores[2].setString("#2 ");
-    scores[3].setString("#3 ");
-    scores[4].setString("#4 ");
-    scores[5].setString("#5 ");
+    scores[1].setString("#1 "+std::to_string(bests[0]));
+    scores[2].setString("#2 "+std::to_string(bests[1]));
+    scores[3].setString("#3 "+std::to_string(bests[2]));
+    scores[4].setString("#4 "+std::to_string(bests[3]));
+    scores[5].setString("#5 "+std::to_string(bests[4]));
     scores[6].setString("Back to menu");
 
     scores[0].setFont(font);
@@ -297,3 +297,4 @@ void View::setBestsBacklights(sf::Vector2f mouse) {
         scores[6].setFillColor(sf::Color::White);
 
 }
+
