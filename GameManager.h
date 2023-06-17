@@ -66,6 +66,7 @@ public:
     void statesSwitch(sf::RenderWindow &window);
     void gameLevel(sf::Event &event, sf::Vector2f mouse);
     void setParameters();
+    void loadBestScores();
     void updateBestScores(int score);
 
 };

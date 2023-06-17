@@ -1,7 +1,3 @@
-//
-// Created by Adam on 07.06.2023.
-//
-
 #include "GameManager.h"
 
 GameManager::GameManager(Snake &snake, Board &board, Food &fruit, View& view): snake(snake),board(board),fruit(fruit), view(view){
@@ -11,11 +7,13 @@ GameManager::GameManager(Snake &snake, Board &board, Food &fruit, View& view): s
     this->isFruitGenerated = false;
     this->moveInterval = 0.1;
     this->normal=true;
+    this->score=0;
     this->easy= false;
     this->hard= false;
     this->keyPressed=false;
     this->areStringsInitialized= false;
     this->areDimensionsSeted=false;
+    loadBestScores();
 
 }
 
@@ -44,9 +42,9 @@ void GameManager::update(sf::RenderWindow &window) {
             areStringsInitialized=true;
         }
         statesSwitch(window);
-        }
+    }
 
-        }
+}
 
 
 
@@ -61,30 +59,30 @@ void GameManager::handleInput(sf::RenderWindow& window)
         {
             if(gameState==STARTED)
                 whenStarted(event);
-            }
         }
     }
+}
 
 
 
 void GameManager::whenStarted(sf::Event &event) {
-if(keyPressed==false) {
-    keyPressed = true;
-    sf::Vector2f currentDirection = snake.getDirection();
-    if (currentDirection.y == 0) {
-        if (event.key.code == sf::Keyboard::Up && snake.getDirection().y == 0)
-            snake.setDirection(sf::Vector2f(0.0f, -1.0f));
-        if (event.key.code == sf::Keyboard::Down && snake.getDirection().y == 0)
-            snake.setDirection(sf::Vector2f(0.0f, 1.0f));
-    }
-    if (currentDirection.x == 0) {
-        if (event.key.code == sf::Keyboard::Left && snake.getDirection().x == 0)
-            snake.setDirection(sf::Vector2f(-1.0f, 0.0f));
-        if (event.key.code == sf::Keyboard::Right && snake.getDirection().x == 0)
-            snake.setDirection(sf::Vector2f(1.0f, 0.0f));
+    if(keyPressed==false) {
+        keyPressed = true;
+        sf::Vector2f currentDirection = snake.getDirection();
+        if (currentDirection.y == 0) {
+            if (event.key.code == sf::Keyboard::Up && snake.getDirection().y == 0)
+                snake.setDirection(sf::Vector2f(0.0f, -1.0f));
+            if (event.key.code == sf::Keyboard::Down && snake.getDirection().y == 0)
+                snake.setDirection(sf::Vector2f(0.0f, 1.0f));
+        }
+        if (currentDirection.x == 0) {
+            if (event.key.code == sf::Keyboard::Left && snake.getDirection().x == 0)
+                snake.setDirection(sf::Vector2f(-1.0f, 0.0f));
+            if (event.key.code == sf::Keyboard::Right && snake.getDirection().x == 0)
+                snake.setDirection(sf::Vector2f(1.0f, 0.0f));
 
+        }
     }
-}
 }
 
 void GameManager::snakeDisplay(sf::RenderWindow& window)
@@ -125,7 +123,7 @@ bool GameManager::isCollision() {
             return true;
         }
         if (board.isSnakeOutOfBorders(snake.getSnake()[0])) {
-           whenOutOfBorders();
+            whenOutOfBorders();
             return true;
         }
 
@@ -148,7 +146,7 @@ void GameManager::whenOutOfBorders() {
     {
         snake.setDirection(sf::Vector2f(0.0f,0.0f));
         gameState=OVER;
-}
+    }
 }
 void GameManager::whenFruitCollision() {
     isFruitGenerated= false;
@@ -158,7 +156,7 @@ void GameManager::whenFruitCollision() {
         view.updateScore(score);
     }
     else { snake.addSnakeSegment();
-    score++;
+        score++;
         view.updateScore(score);}
 
 }
@@ -171,23 +169,23 @@ void GameManager::whenSelfCollision() {
 
 void GameManager::caseStarted(sf::RenderWindow &window)
 {
-                setParameters();
-                static float elapsedTime = 0.0f;
-                elapsedTime += dt;
-                if (elapsedTime >= moveInterval) {
+    setParameters();
+    static float elapsedTime = 0.0f;
+    elapsedTime += dt;
+    if (elapsedTime >= moveInterval) {
 
-                    if (gameState == STARTED) {
-                        keyPressed= false;
-                        handleInput(window);
-                        snake.moveSnake(snake.getDirection());
-                        if (!isFruitGenerated) {
-                            generatedFruitCount = fruit.generateFood(board.getXBeginning(), board.getYBeginning(), snake);
-                            isFruitGenerated = true;
-                        }
-                        isCollision();
-                        elapsedTime = 0.0f;
-                    }
-                }
+        if (gameState == STARTED) {
+            keyPressed= false;
+            handleInput(window);
+            snake.moveSnake(snake.getDirection());
+            if (!isFruitGenerated) {
+                generatedFruitCount = fruit.generateFood(board.getXBeginning(), board.getYBeginning(), snake);
+                isFruitGenerated = true;
+            }
+            isCollision();
+            elapsedTime = 0.0f;
+        }
+    }
 }
 
 void GameManager::caseMenu(sf::RenderWindow& window)
@@ -262,23 +260,23 @@ void GameManager::optionsActions(sf::RenderWindow &window, sf::Event &event) {
                 }
             view.setOptionsBacklights(mouse, easy, normal, hard, bordersPenetration);
         }
-view.optionsDisplay(window);
+        view.optionsDisplay(window);
     }
 }
 
 void GameManager::caseOver(sf::RenderWindow &window) {
-        sf::Event event;
-        std::cout<<score<<std::endl;
+    sf::Event event;
+    std::cout<<score<<std::endl;
     bestsSeted= false;
     updateBestScores(score);
     while (gameState == GameManager::OVER) {
-    overActions(window, event );
+        overActions(window, event );
     }
     snake.clearSnake();
     isStartPosition = false;
     isFruitGenerated=false;
     fruit.clearGeneratedFoods();
-        update(window);
+    update(window);
 }
 
 void GameManager::overActions(sf::RenderWindow &window, sf::Event &event) {
@@ -308,8 +306,8 @@ void GameManager::overActions(sf::RenderWindow &window, sf::Event &event) {
 }
 
 void GameManager::caseBests(sf::RenderWindow &window) {
-   if(!bestsSeted) { view.setBests(window, bests);
-   bestsSeted= true;}
+    if(!bestsSeted) { view.setBests(window, bests);
+        bestsSeted= true;}
     sf::Event event;
     while (gameState == GameManager::SCORES) {
         bestsActions(window, event );
@@ -406,18 +404,6 @@ void GameManager::setParameters() {
 }
 
 void GameManager::updateBestScores(int score) {
-    int best;
-
-    std::fstream file;
-    file.open("..\\best_scores.txt", std::ios::in);
-    if (file.is_open()) {
-        std::string line;
-        while (std::getline(file, line)) {
-            best = std::stoi(line);
-            bests.push_back(best);
-        }
-        file.close();
-    }
 
     bests.push_back(score);
     std::sort(bests.rbegin(), bests.rend());
@@ -435,4 +421,22 @@ void GameManager::updateBestScores(int score) {
     } else {
         std::cerr << "Cannot open file for writing!" << std::endl;
     }
+}
+
+void GameManager::loadBestScores() {
+    int best;
+
+    std::fstream file;
+    file.open("..\\best_scores.txt", std::ios::in);
+    if (file.is_open()) {
+        std::string line;
+        while (std::getline(file, line)) {
+            std::cout<<best<<std::endl;
+            best = std::stoi(line);
+            bests.push_back(best);
+        }
+        file.close();
+    }
+
+
 }
