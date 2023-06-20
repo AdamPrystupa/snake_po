@@ -266,7 +266,6 @@ void GameManager::optionsActions(sf::RenderWindow &window, sf::Event &event) {
 
 void GameManager::caseOver(sf::RenderWindow &window) {
     sf::Event event;
-    std::cout<<score<<std::endl;
     bestsSeted= false;
     updateBestScores(score);
     while (gameState == GameManager::OVER) {
@@ -431,7 +430,6 @@ void GameManager::loadBestScores() {
     if (file.is_open()) {
         std::string line;
         while (std::getline(file, line)) {
-            std::cout<<best<<std::endl;
             best = std::stoi(line);
             bests.push_back(best);
         }
